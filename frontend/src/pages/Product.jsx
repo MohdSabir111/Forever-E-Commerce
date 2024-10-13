@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom'
 import { ShopContext } from '../context/ShopContext'
 import { assets } from '../assets/assets';
 import RelatedProduct from '../components/RelatedProduct';
+import Title from './../components/Title';
 
 function Product() {
    const {productId} = useParams()
@@ -94,10 +95,11 @@ function Product() {
     </div>
    </div>
 
-   {/**===== Display Related Product Section ======  */}
+   { /**  ===== Display Related Product Section ======  */ }
     
     <RelatedProduct category={productData.category} subCategory={productData.subCategory} />
-   
+    
+            
     </div>
   ) : <div className='opacity-0' ></div>
 }
