@@ -31,7 +31,7 @@ function Footer() {
         
          <div>
             <hr />
-            <p className='text-center text-sm py-5 ' >Copyright 2024@ fover.com - All Right Reserved. </p>
+            <p className='text-center text-sm py-5 ' >Copyright 2024@ forever.com - All Right Reserved. </p>
          </div>
 
     </div>

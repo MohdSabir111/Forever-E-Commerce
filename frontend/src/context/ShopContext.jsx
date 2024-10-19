@@ -34,8 +34,10 @@ export const ShopContext = createContext();
       setCartItems(cartData)
   }
 
+  //======== to calculate Total number in cart Icon in Navbar
    const getCartCount = ()=>{
      let totalCount = 0;
+     console.log(cartItems)
       for( const items in cartItems){
         for( const item in cartItems[items]){
           try {
@@ -50,12 +52,20 @@ export const ShopContext = createContext();
       return totalCount;
    }
 
+   //==== setting new quantity for a perticular item and to remove item from cart ui 
+   const updateQuantity = async (itemId, size , quantity) => {
+    let cartData = structuredClone(cartItems);
+    cartData[itemId][size] = quantity;
+    setCartItems(cartData)
+   }
+
+
     const value = {
         products, currency, delivery_fee,
         search, setSearch,
         showSearch, setShowSearch,
         cartItems, addToCart,
-        getCartCount,
+        getCartCount,updateQuantity,
     }
 
       return ( 
