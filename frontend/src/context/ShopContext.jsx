@@ -59,6 +59,27 @@ export const ShopContext = createContext();
     setCartItems(cartData)
    }
 
+   //============== TO calculate Total Amount in Cart ======
+  
+   const getCartAmount  = () => {
+    let totalAmount = 0;
+    for(const items in cartItems){
+      let itemInfo = products.find((product)=> product._id === items );
+       for(const item in cartItems[items]){
+         try {
+           // console.log(cartItems["product1"]["sizeM"]) for understanding
+            if(cartItems[items][item]>0){
+              totalAmount += itemInfo.price * cartItems[items][item]
+
+            }
+         } catch (error) {
+          
+         }
+       }
+    }
+     return totalAmount;
+   }
+
 
     const value = {
         products, currency, delivery_fee,
@@ -66,6 +87,7 @@ export const ShopContext = createContext();
         showSearch, setShowSearch,
         cartItems, addToCart,
         getCartCount,updateQuantity,
+        getCartAmount,
     }
 
       return ( 

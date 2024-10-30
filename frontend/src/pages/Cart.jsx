@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import { ShopContext } from '../context/ShopContext'
 import Title from '../components/Title';
 import { assets } from '../assets/assets';
+import CartTotal from '../components/CartTotal';
 
 
 function Cart() {
@@ -33,7 +34,7 @@ function Cart() {
           <Title text1={"YOUR"} text2={"CART"} />
         </div>
 
-        
+     <div>
     {
       cartData.map((item, index)=>{
         const productData = products.find((product)=> product._id === item._id)
@@ -56,7 +57,18 @@ function Cart() {
     )
       })
     }
+  </div>   
+      <div className='flex justify-end my-20'> 
+        <div className='w-full sm:w-[450px]'>
+          <CartTotal/>
+          <div className='w-full text-end'>
+            <button className='bg-black text-white my-8 py-3 px-2' >PROCEED TO CHECKOUT</button>
+          </div>
+       </div>
+      </div>
+
     </div>
+    
 
 
   )
