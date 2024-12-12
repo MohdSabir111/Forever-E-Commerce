@@ -51,24 +51,66 @@ const addProduct = async (req, res) => {
  };
  
 
-//-------------- List  product--------------
+
+
+//--------------   Fetching the Products  --------------
 
 const listProducts = async (req, res) => {
-  
+   try {
+    const products = await productModel.find({});
+    return res.status(200).json({success:true, products})
+   } catch (error) {
     
+    console.error(error.stack); // Log the full error stack for debugging
+    return res.status(404).json({
+      success: false,
+      message: "Unable to Fetch The Products",
+      error: error.message,
+    });
+   }  
 }
+
+
 
 
 //-------------- Removing  product--------------
-const removeProduct = async (req, res) => {
 
-    
+const removeProduct = async (req, res) => {
+try {
+  
+  await productModel.findByIdAndDelete(req.body.id);
+  return res.status(200).json({success:true , message : "Product Removed"});
+} catch (error) {
+  console.error(error.stack); 
+  return res.status(404).json({
+    success: false,
+    message: "Unable to Remove The Products",
+    error: error.message,
+  });
+
+}    
 }
 
-//--------------Single Product Info --------------
-const singleProduct = async (req, res) => {
 
-    
+
+//--------------Single Product Info --------------
+
+const singleProduct = async (req, res) => {
+try {
+  const {productId} = req.body;
+  const product = await productModel.findById(productId);
+  return res.status(200).json({success:true , data:product});
+
+  
+} catch (error) {
+
+  console.error(error.stack); 
+  return res.status(404).json({
+    success: false,
+    message: "Unable to Fetch The Product Info",
+    error: error.message,
+  });
+}    
 }
 
 
