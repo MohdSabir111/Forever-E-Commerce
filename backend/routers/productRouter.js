@@ -1,6 +1,7 @@
 import express from 'express';
 import {addProduct,listProducts,removeProduct,singleProduct} from '../controllers/productController.js';
 import upload from '../middleware/multer.js';
+import adminAuth from '../middleware/adminAuth.js';
 
 const productRouter = express.Router();
 //upload.fields() is a method to handle multiple fields, each potentially containing one or more files.
@@ -8,10 +9,10 @@ const productRouter = express.Router();
 //maxCount: The maximum number of files allowed for this field.
 //addProduct:This is the controller function that handles the request after the files are processed and available in req.files.
 
-productRouter.post('/add',upload.fields([{name:"image1", maxCount:1},{name:"image2", maxCount:1},{name:"image3", maxCount:1},{name:"image4", maxCount:1}]),addProduct);
+productRouter.post('/add',adminAuth,upload.fields([{name:"image1", maxCount:1},{name:"image2", maxCount:1},{name:"image3", maxCount:1},{name:"image4", maxCount:1}]),addProduct);
     
-productRouter.post('/remove',removeProduct);
-productRouter.post('/single',singleProduct);
+productRouter.post('/remove',adminAuth,removeProduct);
+productRouter.post('/single',singleProduct); 
 productRouter.get('/list',listProducts);
 
 export default productRouter;

@@ -70,6 +70,19 @@ const loginUser = async (req, res) => {
 //---------- Admin Login  --------
 
 const adminLogin = async (req, res) => {
+  try {
+    const {email, password } = req.body;
+      if(email === process.env.ADMIN_EMAIL && password === process.env.ADMIN_PASSWORD){
+        const token = jwt.sign(email+password, process.env.JWT_SECRET)
+        return res.status(200).json({success:true, token}) 
+      }else{
+        return res.status(404).json({success : false , message : "Invalid Email or Password"})   
+      }
+
+  } catch (error) {
+    console.error(error.stack);
+    return res.status(404).json({success : false , message : "Admin Login Failed", error:error.message})
+  }
     
 }
 
