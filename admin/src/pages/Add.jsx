@@ -41,7 +41,17 @@ function Add({token}) {
 
       const response = await axios.post(backendUrl+"/api/product/add",formData,{ headers: { token } });
        if(response.data.success){
-           toast.success("Product Added Successfully");
+           toast.success(response.data.message);
+            setName('');
+            setDescription('');
+            setPrice('');
+            setSizes([]);
+            setImage1(false);
+            setImage2(false);
+            setImage3(false);
+            setImage4(false);     
+       }else{
+            toast.error(response.data.message || "error in adding product");
        }
 
       } catch (error) {
