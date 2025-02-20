@@ -338,7 +338,7 @@ export const products = [
     },
     {
         _id: "aaaau",
-        name: "Women Zip-Front Relaxed Fit Jacket",
+        name: "A lightweight, usually knitted, pullover shirt, close-fitting and with a round neckline and short sleeves, worn as an undershirt or outer garment",
         description: "A lightweight, usually knitted, pullover shirt, close-fitting and with a round neckline and short sleeves, worn as an undershirt or outer garment.",
         price: 170,
         image: [p_img21],
