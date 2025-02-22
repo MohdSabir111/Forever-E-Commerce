@@ -38,12 +38,27 @@ export const ShopContext = createContext();
         cartData[itemId][size] = 1;
       }
       setCartItems(cartData)
+      
+      // adding the item to the cart in the backend database
+      if(token){
+        try {
+          const response = await axios.post(backendUrl+"/api/cart/add", {itemId, size}, {headers: {token}});
+          if(response.data.success){
+            toast.success(response.data.message);
+          }else{
+            toast.error(response.data.message);
+          }
+        } catch (error) {
+          console.error(error);
+          toast.error(error.response?.data?.message || "Error in adding item to cart");
+        }
+       }
   }
 
   //======== to calculate Total number in cart Icon in Navbar
    const getCartCount = ()=>{
      let totalCount = 0;
-     console.log(cartItems)
+    // console.log(cartItems, "cartItems")
       for( const items in cartItems){
         for( const item in cartItems[items]){
           try {
@@ -58,15 +73,45 @@ export const ShopContext = createContext();
       return totalCount;
    }
 
-   //==== setting new quantity for a perticular item and to remove item from cart ui 
-   const updateQuantity = async (itemId, size , quantity) => {
+
+
+   //===== setting new quantity for a perticular item and to remove item from cart ui =======================
+    
+    const updateQuantity = async (itemId, size , quantity) => {
     let cartData = structuredClone(cartItems);
     cartData[itemId][size] = quantity;
     setCartItems(cartData)
+
+    // updating the quantity in the backend database using api
+    if(token){
+      try {
+        const response = await axios.post(backendUrl+"/api/cart/update", {itemId, size, quantity}, {headers: {token}});
+        if(response.data.success){
+          toast.success(response.data.message);
+        }else{
+          toast.error(response.data.message);
+        }
+      } catch (error) {
+        console.error(error);
+        toast.error(error.response?.data?.message || "Error in updating quantity");
+      }
+    }
    }
 
-   //============== TO calculate Total Amount in Cart ======
+  //========== getting user cart data from the backend ========================
   
+  const getUserCart = async (token)=>{
+     try {
+        const response = await axios.post(backendUrl+"/api/cart/get", {}, {headers: {token}});
+        if(response.data.success){
+          setCartItems(response.data.cartData);
+        }
+     } catch (error) {
+      
+     }
+  }
+
+   //============== TO calculate Total Amount in Cart ========================
    const getCartAmount  = () => {
     let totalAmount = 0;
     for(const items in cartItems){
@@ -87,7 +132,7 @@ export const ShopContext = createContext();
    }
 
 
-    //======== to get the products from the backend
+    //======== to get the products from the backend  ========================
      const getProductsData = async ()=>{
       try {
           const response = await axios.get(backendUrl+"/api/product/list");
@@ -103,6 +148,10 @@ export const ShopContext = createContext();
 
     }
 
+
+
+ //======== useEffects =============================
+
     useEffect(()=>{
         getProductsData();
     } ,[]);
@@ -110,10 +159,9 @@ export const ShopContext = createContext();
     useEffect(()=>{
       if(!token && localStorage.getItem('token')){
         setToken(localStorage.getItem('token'));
+        getUserCart(localStorage.getItem('token')); 
       
-      }
-    }
-    ,[token]) 
+      } },[token]) 
     
 
     const value = {
