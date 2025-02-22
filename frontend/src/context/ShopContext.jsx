@@ -11,6 +11,7 @@ export const ShopContext = createContext();
     const currency = '$'
     const delivery_fee = 10;
     const backendUrl = import.meta.env.VITE_BACKEND_URL
+    const [token, setToken] = useState('');
     const [search, setSearch] = useState('')
     const [showSearch, setShowSearch] = useState(false) 
     const [cartItems, setCartItems] = useState({});
@@ -105,6 +106,14 @@ export const ShopContext = createContext();
     useEffect(()=>{
         getProductsData();
     } ,[]);
+
+    useEffect(()=>{
+      if(!token && localStorage.getItem('token')){
+        setToken(localStorage.getItem('token'));
+      
+      }
+    }
+    ,[token]) 
     
 
     const value = {
@@ -113,7 +122,8 @@ export const ShopContext = createContext();
         showSearch, setShowSearch,
         cartItems, addToCart,
         getCartCount,updateQuantity,
-        getCartAmount,navigate,backendUrl
+        getCartAmount,navigate,backendUrl,
+        token,setToken
     }
 
       return ( 

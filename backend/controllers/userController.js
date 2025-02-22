@@ -17,13 +17,13 @@ const registerUser = async (req, res) => {
        //checking if user is already exists or not
        const exists  = await userModel.findOne({email});
        if(exists){
-        return res.status(400).json({success:"failed" , messsage:"User is already exists"})
+        return res.status(400).json({success:"failed" , message:"User is already exists"})
        }
        if(!validator.isEmail(email)){
-        return res.status(400).json({success:"failed" , messsage:"Please Enter A valid Email"})
+        return res.status(400).json({success:"failed" , message:"Please Enter A valid Email"})
        }
        if(password.length < 8){
-        return res.status(400).json({success:"failed" , messsage:"Please Enter A Strong Password "})
+        return res.status(400).json({success:"failed" , message:"Please Enter A Strong Password with minimum 8 characters"})
        }
 
 //-===  Hashing The Password 
