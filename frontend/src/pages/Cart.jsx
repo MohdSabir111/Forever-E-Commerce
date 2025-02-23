@@ -12,21 +12,25 @@ function Cart() {
   
   useEffect(()=>{
 
-    const tempData = [];
-    for(const product in cartItems){
-      for(const size in cartItems[product]){
-          if(cartItems[product][size] > 0){
-            tempData.push({
-              _id : product,
-              size : size ,
-              quantity : cartItems[product][size] 
-            })
-         }
-      }
-    }
+      if(products.length > 0 ){
 
-   setCartData(tempData)
-  }, [cartItems])
+        const tempData = [];
+        for(const product in cartItems){
+          for(const size in cartItems[product]){
+              if(cartItems[product][size] > 0){
+                tempData.push({
+                  _id : product,
+                  size : size ,
+                  quantity : cartItems[product][size] 
+                })
+             }
+          }
+        }
+    
+       setCartData(tempData)
+
+      }
+  }, [cartItems, products])
 
   return ( 
     <div className='pt-14 border-t' >
