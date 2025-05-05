@@ -18,7 +18,7 @@ function List({token}) {
           toast.error(response.data.message);
         }
       } catch (error) {
-        console.error(error);
+        console.log(error.response.data.error)
         toast.error(error.response?.data?.message || "error in fetching products");
       }   
    }

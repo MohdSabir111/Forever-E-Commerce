@@ -17,13 +17,13 @@ const registerUser = async (req, res) => {
        //checking if user is already exists or not
        const exists  = await userModel.findOne({email});
        if(exists){
-        return res.status(400).json({success:"failed" , message:"User is already exists"})
+        return res.status(400).json({success:false , message:"User is already exists"})
        }
        if(!validator.isEmail(email)){
-        return res.status(400).json({success:"failed" , message:"Please Enter A valid Email"})
+        return res.status(400).json({success:false , message:"Please Enter A valid Email"})
        }
        if(password.length < 8){
-        return res.status(400).json({success:"failed" , message:"Please Enter A Strong Password with minimum 8 characters"})
+        return res.status(400).json({success:false , message:"Please Enter A Strong Password with minimum 8 characters"})
        }
 
 //-===  Hashing The Password 
@@ -65,6 +65,20 @@ const loginUser = async (req, res) => {
     
 }
 
+// --------- User Profile  ----------------------
+const userProfile = async (req, res) => {
+  try {
+    const {userId} = req.body;
+    const user = await userModel.findById(userId)
+    if(!user){
+        return res.status(404).json({success : false , message : "User Does'nt Exists"})
+    }
+    res.status(200).json({success:true, user})
+  } catch (error) {
+    return res.status(404).json({success : false , message : "Unable To Fetch User Profile", error:error.message})
+  }
+    
+}
 
 
 //---------- Admin Login  --------
@@ -89,4 +103,4 @@ const adminLogin = async (req, res) => {
 
 //------------exporting-------------------
 
-export {loginUser, registerUser, adminLogin}
+export {loginUser, registerUser, adminLogin,userProfile}

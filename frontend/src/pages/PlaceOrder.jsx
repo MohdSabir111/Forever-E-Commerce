@@ -3,7 +3,6 @@ import Title from '../components/Title'
 import CartTotal from '../components/CartTotal'
 import { assets } from '../assets/assets'
 import { ShopContext } from '../context/ShopContext';
-import { backendUrl } from './../../../admin/src/App';
 import { toast } from 'react-toastify';
 import axios from 'axios';
 
@@ -23,10 +22,43 @@ function PlaceOrder() {
     country : '',
     phone : '',
   });
+
+
     const onChangeHandler = (e) => {
       const {name , value} = e.target;
       setFormData(data=>({ ...data , [name] : value}));
     } 
+
+
+    const initPay = (order)=>{
+      const options = {
+        key:import.meta.env.VITE_RAZORPAY_KEY_ID,
+        amount: order.amount,
+        currency: order.currency, 
+        name:'Order Paymet',
+        description:'Order Payment',
+        order_id: order.id,
+        receipt: order.receipt,
+        handler:async (response)=>{
+            try {
+              const {data} = await axios.post(backendUrl + '/api/order/verifyrazorpay', response, {headers : {token}});
+              if(data.success){
+                const {order} = data;
+                toast.success('Payment Successfull');
+                setCartItems({});
+                navigate('/orders');
+              }
+              
+            } catch (error) {
+              toast.error('Payment Failed');
+              console.log(error);
+            }
+        }
+      }
+      const rzp = new window.Razorpay(options); 
+      rzp.open();
+
+    }
 
    const onSubmitHandler = async (event) => {
       event.preventDefault();
@@ -43,6 +75,7 @@ function PlaceOrder() {
          }
         }
         }
+
       let orderData = {
         items : orderItems,
         amount : getCartAmount() + delivery_fee,
@@ -53,15 +86,29 @@ function PlaceOrder() {
         case 'cod': const response = await axios.post(backendUrl +'/api/order/place', orderData, {headers : {token}});
         console.log(response.data)
         if(response.date.success){
-          setCartItems({});
+          setCartItems({}); 
           navigate('/orders');
         }else{
           toast.error(response.data.message);
         }
         break;
+
+
         case 'stripe': const stripeResponse = await axios.post(backendUrl+'/api/order/stripe', orderData, {headers : {token}});
+        if(stripeResponse.data.success){
+          const { session_url} = stripeResponse.data;
+             window.location.replace(session_url);
+        }else{
+          toast.error(stripeResponse.data.message); 
+        }
         break;
+
+
         case 'razorpay': const razorpayResponse = await axios.post(backendUrl+'/api/order/razorpay', orderData, {headers : {token}});
+        if(razorpayResponse.data.success){
+           initPay(razorpayResponse.data.order);
+        }
+         
         break;
           default : break;
       }
@@ -69,7 +116,8 @@ function PlaceOrder() {
       }
   
      } catch (error) {
-      
+          toast.error(error);
+          console.log(error)
      }
    }
  
