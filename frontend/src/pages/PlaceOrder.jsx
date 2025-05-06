@@ -84,11 +84,11 @@ function PlaceOrder() {
 
       switch(method){
         case 'cod': const response = await axios.post(backendUrl +'/api/order/place', orderData, {headers : {token}});
-        console.log(response.data)
         if(response.data.success){
           setCartItems({}); 
           navigate('/orders');
         }else{
+          toast.error(response.data);
           toast.error(response.data.message);
         }
         break;
@@ -111,12 +111,10 @@ function PlaceOrder() {
          
         break;
           default : break;
-      }
-   
-      }
+      } }
   
      } catch (error) {
-          toast.error(error);
+          toast.error(error.response.data.message);
           console.log(error)
      }
    }
