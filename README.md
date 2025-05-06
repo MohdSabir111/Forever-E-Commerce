@@ -31,7 +31,7 @@ This is a fully functional E-Commerce web application built using the MERN stack
 
 ```bash
 git clone https://github.com/MohdSabir111/Forever-E-Commerce/
-cd mern-ecommerce
+cd forever-e-commerce
 ```
 
 ### Install dependencies for backend
